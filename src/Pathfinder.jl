@@ -1,3 +1,5 @@
+module Pathfinder
+
 using HttpServer
 
 include("routeoptimizer.jl")
@@ -16,3 +18,5 @@ end
 
 server = Server(http)
 run(server, 2929)
+
+end
