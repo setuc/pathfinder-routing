@@ -3,8 +3,7 @@ os:
   - linux
   - osx
 julia:
-  - 0.3
   - 0.4
   - nightly
 script:
-  julia -e 'Pkg.test("Pathfinder", coverage=true)'
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("PathfinderRouting"); Pkg.test("PathfinderRouting")'
