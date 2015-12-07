@@ -15,6 +15,6 @@ RUN julia -e 'Pkg.add("JuMP")'
 RUN julia -e 'Pkg.add("HttpServer")'
 
 # Server
-COPY src/Pathfinder.jl /Pathfinder.jl
-COPY src/RouteOptimize.jl /RouteOptimize.jl
-CMD julia Pathfinder.jl
+ADD src /
+RUN chmod +x /server.sh
+CMD ["/server.sh"]
