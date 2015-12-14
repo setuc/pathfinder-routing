@@ -9,7 +9,7 @@ def request_route(route_url):
       0: 2,
       4: 6
     },
-    'times': [
+    'durations': [
       [ 0, 1, 1, 1, 1, 1, 1 ],
       [ 1, 0, 1, 1, 1, 1, 1 ],
       [ 1, 1, 0, 1, 1, 1, 1 ],
