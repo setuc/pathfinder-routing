@@ -10,9 +10,14 @@ RUN apt-get install -y libgmp-dev
 RUN julia -e "Pkg.resolve()"
 
 # Dependencies
-RUN julia -e 'Pkg.add("GLPKMathProgInterface")'
-RUN julia -e 'Pkg.add("JuMP")'
+ADD REQUIRE /.julia/v0.4/REQUIRE
+RUN julia -e "Pkg.resolve()"
+RUN julia -e 'Pkg.add("Cbc")'
 RUN julia -e 'Pkg.add("HttpServer")'
+RUN julia -e 'Pkg.add("JuMP")'
+RUN julia -e 'Pkg.add("JSON")'
+RUN julia -e 'Pkg.add("Logging")'
+
 
 # Server
 ADD src /
