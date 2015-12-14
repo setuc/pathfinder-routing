@@ -8,8 +8,10 @@ function optimize(VA, commodities, distances, capacities)
   CA = union(PA, DA)
   RA = union(PA, DA, VA)
 
-  for p in PA
-    push!(capacities, commodities[p] => -1*capacities[p])
+  for c in capacities
+    for p in PA
+      push!(c, commodities[p] => -1*c[p])
+    end
   end
   info("Capacities: ", capacities)
 
@@ -60,7 +62,7 @@ function optimize(VA, commodities, distances, capacities)
 
   for p in keys(commodities)
     # Commodity pickups are in the same route as their dropoffs.
-    @addConstraint(model, sum{y[parse(Int64, p),commodities[p],i], i=VA} == 1)
+    @addConstraint(model, sum{y[p,commodities[p],i], i=VA} == 1)
   end
 
   for k in CA

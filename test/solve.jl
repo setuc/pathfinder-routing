@@ -2,7 +2,7 @@ using Base.Test
 using PathfinderRouting
 
 vehicles = [ 1, 3, 5 ]
-commodities = Dict('7' => 2, '4' => 6)
+commodities = Dict(7 => 2, 4 => 6)
 distances = []
 push!(distances, [0,9,0,9,0,9,9])
 push!(distances, [9,0,9,1,9,9,9])
