@@ -28,6 +28,14 @@ function optimize(VA, commodities, distances, capacities)
   @defVar(model, qpos[RA,RA,VA] >= 0, Int)
   @defVar(model, qneg[RA,RA,VA] >= 0, Int)
 
+  for c in capacities
+    for k2 in CA
+      for i in VA
+        # Every route segment obeys constraint limits.
+        @addConstraint(model, sum{c[k1]*y[k1,k2,i], k1=CA} <= c[i])
+      end
+    end
+  end
 
   for k1 in RA
     # Every node has at most one sucessor.
@@ -123,6 +131,7 @@ function optimize(VA, commodities, distances, capacities)
   @setObjective(model, Min, sum{x[k1,k2,i]*distances[k1,k2], k1=RA, k2=RA, i=VA})
 
   status = solve(model)
+  info("Objective: ", getObjectiveValue(model))
 
   solveroutput = getValue(x)
   routes = []
