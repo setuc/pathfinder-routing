@@ -110,8 +110,11 @@ function optimize(VA, commodities, distances, capacities)
   end
 
   for k2 in CA
+    # Every non-starting vertex has exactly one predecessor.
     @addConstraint(model, sum{x[k1,k2,i], k1=RA, i=VA} == 1)
   end
+
+  @setObjective(model, Min, sum{x[k1,k2,i]*distances[k1,k2], k1=RA, k2=RA, i=VA})
 
   status = solve(model)
 
