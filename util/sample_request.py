@@ -6,7 +6,7 @@ def request_route(route_url):
   data = {
     'vehicles': [ 1, 3, 5 ],
     'commodities': {
-      0: 2,
+      7: 2,
       4: 6
     },
     'durations': [
@@ -28,16 +28,16 @@ def request_route(route_url):
       [ 1, 1, 1, 1, 1, 1, 0 ],
     ],
     'capacities': [
-      { 0: 1,
-        1: 1,
+      { 1: 1,
         3: 1,
         4: 1,
-        5: 1
+        5: 1,
+        7: 1
       }
     ],
     'commodityParameters': [
-      { 0: 4,
-        4: 0
+      { 4: 4,
+        7: 0
       }
     ],
     'vehicleParameters': [
