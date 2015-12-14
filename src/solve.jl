@@ -56,7 +56,6 @@ function optimize(VA, commodities, distances, capacities)
 
   for p in keys(commodities)
     # Commodity pickups are in the same route as their dropoffs.
-    warn("requiring y[",parse(Int64,p),",",commodities[p],",i] sum to 1")
     @addConstraint(model, sum{y[parse(Int64, p),commodities[p],i], i=VA} == 1)
   end
 
@@ -114,13 +113,10 @@ function optimize(VA, commodities, distances, capacities)
     @addConstraint(model, sum{x[k1,k2,i], k1=RA, i=VA} == 1)
   end
 
-  print(model)
   status = solve(model)
 
   solveroutput = getValue(x)
   routes = []
-  debug(getValue(x))
-  debug(getValue(y))
   for i in VA
     components = Dict()
     for k1 in RA
@@ -130,7 +126,6 @@ function optimize(VA, commodities, distances, capacities)
         end
       end
     end
-    debug(components)
     position = i
     order = [position]
     while haskey(components, position)
