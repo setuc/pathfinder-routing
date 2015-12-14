@@ -5,6 +5,6 @@ os:
 julia:
   - 0.4
 script:
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("PathfinderRouting"); Pkg.test("PathfinderRouting")'
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("PathfinderRouting"); Pkg.test("PathfinderRouting", coverage=true)'
 after_success:
   - julia -e 'cd(Pkg.dir("PathfinderRouting")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'
