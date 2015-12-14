@@ -12,8 +12,12 @@ function startserver()
     info("Received route request: ", JSON.parse(bytestring(req.data)))
     jsonreq = JSON.parse(bytestring(req.data))
     vehicles = jsonreq["vehicles"]
+    commodities = jsonreq["commodities"]
+    commodities = [parse(Int64, p) => commodities[p] for p=keys(commodities)]
+    capacities = jsonreq["capacities"]
+    capacities = [parse(Int64, a) => capacities[a] for p=keys(capacities)]
     distances = transpose(hcat(jsonreq["distances"]...))
-    result = optimize(jsonreq["vehicles"], jsonreq["commodities"], distances, jsonreq["capacities"])
+    result = optimize(vehicles, commodities, distances, capacities)
     response = JSON.json(Dict("routes" => result))
     info("Returning response: ", response)
     return Response(response)

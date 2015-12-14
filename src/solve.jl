@@ -3,10 +3,15 @@ using Logging
 
 # https://github.com/CSSE497/PathfinderRouting/blob/dev/docs/Route%20Optimization%20Model.pdf
 function optimize(VA, commodities, distances, capacities)
-  PA = [parse(Int64, p) for p=keys(commodities)]
+  PA = [p for p=keys(commodities)]
   DA = [d for d=values(commodities)]
   CA = union(PA, DA)
   RA = union(PA, DA, VA)
+
+  for p in PA
+    push!(capacities, commodities[p] => -1*capacities[p])
+  end
+  info("Capacities: ", capacities)
 
   model = Model()
 
