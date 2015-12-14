@@ -9,7 +9,6 @@ function optimize(VA, commodities, distances, capacities)
   RA = union(PA, DA, VA)
 
   model = Model()
-  M = 99999
 
   @defVar(model, 0 <= x[RA,RA,VA] <= 1, Int)
   @defVar(model, 0 <= y[RA,RA,VA] <= 1, Int)
