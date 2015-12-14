@@ -1,4 +1,5 @@
 # Pathfinder Route Optimization Web Service
+[![Coverage Status](https://coveralls.io/repos/CSSE497/PathfinderRouting/badge.svg?branch=dev&service=github)](https://coveralls.io/github/CSSE497/PathfinderRouting?branch=dev)
 [![Stories in Ready](https://badge.waffle.io/CSSE497/pathfinder-routing.svg?label=ready&title=Ready)](http://waffle.io/CSSE497/pathfinder-routing)
 [![Stories in Progress](https://badge.waffle.io/CSSE497/pathfinder-routing.svg?label=In%20Progress&title=In%20Progress)](http://waffle.io/CSSE497/pathfinder-routing)
 [![Stories under Review](https://badge.waffle.io/CSSE497/pathfinder-routing.svg?label=Under%20Review&title=Under%20Review)](http://waffle.io/CSSE497/pathfinder-routing)
