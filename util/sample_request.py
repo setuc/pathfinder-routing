@@ -9,6 +9,15 @@ def request_route(route_url):
       0: 2,
       4: 6
     },
+    'times': [
+      [ 0, 1, 1, 1, 1, 1, 1 ],
+      [ 1, 0, 1, 1, 1, 1, 1 ],
+      [ 1, 1, 0, 1, 1, 1, 1 ],
+      [ 1, 1, 1, 0, 1, 1, 1 ],
+      [ 1, 1, 1, 1, 0, 1, 1 ],
+      [ 1, 1, 1, 1, 1, 0, 1 ],
+      [ 1, 1, 1, 1, 1, 1, 0 ],
+    ],
     'distances': [
       [ 0, 1, 1, 1, 1, 1, 1 ],
       [ 1, 0, 1, 1, 1, 1, 1 ],
@@ -25,7 +34,19 @@ def request_route(route_url):
         4: 1,
         5: 1
       }
-    ]
+    ],
+    'commodityParameters': [
+      { 0: 4,
+        4: 0
+      }
+    ],
+    'vehicleParameters': [
+      { 1: 7,
+        3: 7,
+        5: 7
+      }
+    ],
+    'objective': '2+2'
   }
   r = requests.post(route_url, json=data)
   print 'Status code: ' + str(r.status_code)
