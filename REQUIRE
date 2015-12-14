@@ -4,3 +4,4 @@ HttpServer
 JuMP
 GLPKMathProgInterface
 Logging
+JSON
