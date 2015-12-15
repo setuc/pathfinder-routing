@@ -16,7 +16,7 @@ function startserver()
     commodities = [parse(Int64, p) => commodities[p] for p=keys(commodities)]
     capacities = jsonreq["capacities"]
     capacities = [[parse(Int64, a) => c[a] for a=keys(c)] for c=capacities]
-    distances = hcat(jsonreq["distances"]...)
+    distances = transpose(hcat(jsonreq["distances"]...))
     result = optimize(vehicles, commodities, distances, capacities)
     response = JSON.json(Dict("routes" => result))
     info("Returning response: ", response)
