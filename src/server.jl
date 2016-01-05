@@ -31,9 +31,9 @@ end
 
 function parseobjective(raw)
   if "objective" in keys(raw)
-    return parse(keys["objective"])
+    return raw["objective"]
   else
-    return nothing
+    return "sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA}"
   end
 end
 

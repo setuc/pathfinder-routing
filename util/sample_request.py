@@ -46,7 +46,7 @@ def request_route(route_url):
         5: 7
       }
     ],
-    'objective': '2+2'
+    'objective': '-1.0*sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA}'
   }
   r = requests.post(route_url, json=data)
   print 'Status code: ' + str(r.status_code)
