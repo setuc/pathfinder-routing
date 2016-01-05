@@ -48,3 +48,28 @@ push!(expected, [5])
 route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities)
 
 @test route == expected
+
+# Maximize distance traveled by vehicle 5.
+
+vehicles = [ 1, 3, 5 ]
+commodities = Dict(7 => 2, 4 => 6)
+distances = []
+push!(distances, [1,1,1,1,1,1,1])
+push!(distances, [1,1,1,9,1,1,1])
+push!(distances, [1,1,1,1,1,1,9])
+push!(distances, [1,1,1,1,1,9,1])
+push!(distances, [1,1,1,1,1,1,9])
+push!(distances, [1,1,1,1,1,1,5])
+push!(distances, [1,9,1,1,1,1,1])
+capacities = []
+push!(capacities, Dict(1 => 1, 3 => 1, 4 => 1, 5 => 1, 7 => 1))
+objective = :(-1*sum{x[k1,k2,5]*distances[k1,k2], k1=RA, k2=RA})
+
+expected = []
+push!(expected, [1])
+push!(expected, [3])
+push!(expected, [5,7,2,4,6])
+
+route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities, objective)
+
+@test route == expected

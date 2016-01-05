@@ -2,7 +2,7 @@ using JuMP
 using Logging
 
 # https://github.com/CSSE497/PathfinderRouting/blob/dev/docs/Route%20Optimization%20Model.pdf
-function optimize(VA, commodities, distances, capacities, objective=nothing)
+function optimize(VA, commodities, distances, capacities, objective=:(sum{x[k1,k2,i]*distances[k1,k2], k1=RA, k2=RA, i=VA}))
   PA = [p for p=keys(commodities)]
   DA = [d for d=values(commodities)]
   CA = union(PA, DA)
@@ -128,9 +128,6 @@ function optimize(VA, commodities, distances, capacities, objective=nothing)
     @addConstraint(model, sum{x[k1,k2,i], k1=RA, i=VA} == 1)
   end
 
-  if typeof(objective) != Expr
-    objective = :(sum{x[k1,k2,i]*distances[k1,k2], k1=RA, k2=RA, i=VA})
-  end
   @setObjective(model, Min, eval(objective))
 
   status = solve(model)
