@@ -7,17 +7,46 @@ Logging.configure(level=DEBUG)
 
 include("solve.jl")
 
+function parsevehicles(raw)
+  return raw["vehicles"]
+end
+
+function parsecommodities(raw)
+  commodities = raw["commodities"]
+  return [parse(Int64, p) => commodities[p] for p=keys(commodities)]
+end
+
+function parsecapacities(raw)
+  capacities = raw["capacities"]
+  return [[parse(Int64, a) => c[a] for a=keys(c)] for c=capacities]
+end
+
+function parsedistances(raw)
+  return transpose(hcat(raw["distances"]...))
+end
+
+function parsedurations(raw)
+  return transpose(hcat(raw["durations"]...))
+end
+
+function parseobjective(raw)
+  if "objective" in keys(raw)
+    return parse(keys["objective"])
+  else
+    return nothing
+  end
+end
+
 function startserver()
   http = HttpHandler() do req::Request, res::Response
     info("Received route request: ", JSON.parse(bytestring(req.data)))
     jsonreq = JSON.parse(bytestring(req.data))
-    vehicles = jsonreq["vehicles"]
-    commodities = jsonreq["commodities"]
-    commodities = [parse(Int64, p) => commodities[p] for p=keys(commodities)]
-    capacities = jsonreq["capacities"]
-    capacities = [[parse(Int64, a) => c[a] for a=keys(c)] for c=capacities]
-    distances = transpose(hcat(jsonreq["distances"]...))
-    result = optimize(vehicles, commodities, distances, capacities)
+    vehicles = parsevehicles(jsonreq)
+    commodities = parsecommodities(jsonreq)
+    capacities = parsecapacities(jsonreq)
+    distances = parsedistances(jsonreq)
+    objective = parseobjective(jsonreq)
+    result = optimize(vehicles, commodities, distances, capacities, objective)
     response = JSON.json(Dict("routes" => result))
     info("Returning response: ", response)
     return Response(response)
