@@ -1,6 +1,8 @@
 using Base.Test
 using PathfinderRouting
 
+ShortestDistance = "sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA}"
+
 # Single optimal solution.
 
 vehicles = [ 1, 3, 5 ]
@@ -21,7 +23,7 @@ push!(expected, [1])
 push!(expected, [3,7,2,4,6])
 push!(expected, [5])
 
-route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities)
+route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities, ShortestDistance)
 
 @test route == expected
 
@@ -45,11 +47,14 @@ push!(expected, [1])
 push!(expected, [3,7,2,4,6])
 push!(expected, [5])
 
-route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities)
+route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities, ShortestDistance)
 
 @test route == expected
 
+
 # Maximize distance traveled by vehicle 5.
+
+CustomObjective = "-1*sum{distances[k1,k2]*x[k1,k2,5],k1=RA,k2=RA}"
 
 vehicles = [ 1, 3, 5 ]
 commodities = Dict(7 => 2, 4 => 6)
