@@ -2,7 +2,7 @@ using JuMP
 using Logging
 
 # https://github.com/CSSE497/PathfinderRouting/blob/dev/docs/Route%20Optimization%20Model.pdf
-function routecalculation(VA, commodities, distances, capacities)
+function routecalculation(VA, commodities, distances, durations, capacities)
   PA = [p for p=keys(commodities)]
   DA = [d for d=values(commodities)]
   CA = union(PA, DA)
