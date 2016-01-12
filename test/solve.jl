@@ -23,7 +23,7 @@ push!(expected, [1])
 push!(expected, [3,7,2,4,6])
 push!(expected, [5])
 
-route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities, ShortestDistance)
+route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), transpose(hcat(distances...)), capacities, ShortestDistance)
 
 @test route == expected
 
@@ -47,7 +47,7 @@ push!(expected, [1])
 push!(expected, [3,7,2,4,6])
 push!(expected, [5])
 
-route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities, ShortestDistance)
+route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), transpose(hcat(distances...)), capacities, ShortestDistance)
 
 @test route == expected
 
@@ -75,6 +75,6 @@ push!(expected, [1])
 push!(expected, [3])
 push!(expected, [5,7,2,4,6])
 
-route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), capacities, objective)
+route = PathfinderRouting.optimize(vehicles, commodities, transpose(hcat(distances...)), transpose(hcat(distances...)), capacities, objective)
 
 @test route == expected
