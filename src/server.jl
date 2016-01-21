@@ -18,7 +18,7 @@ end
 
 function parsecapacities(raw)
   capacities = raw["capacities"]
-  return [[parse(Int64, a) => capacities[c][a] for a=keys(capacities[c])] for c=keys(capacities)]
+  return [[parse(Int64, a) => c[a] for a=keys(c)] for c=capacities]
 end
 
 function parsedistances(raw)

@@ -3,16 +3,11 @@ using Logging
 
 # https://github.com/CSSE497/PathfinderRouting/blob/dev/docs/Route%20Optimization%20Model.pdf
 function routecalculation(VA, commodities, distances, durations, capacities)
-  PA = [p for p=keys(commodities)]
-  DA = [d for d=values(commodities)]
-  CA = union(PA, DA)
+  DA = [p for p=keys(commodities)]
+  PA = [d for d=values(commodities)]
+  CA = setdiff(union(PA, DA), VA)
   RA = union(PA, DA, VA)
 
-  for c in capacities
-    for p in PA
-      push!(c, commodities[p] => -1*c[p])
-    end
-  end
   info("Capacities: ", capacities)
 
   model = Model()
@@ -70,7 +65,7 @@ function routecalculation(VA, commodities, distances, durations, capacities)
 
   for p in keys(commodities)
     # Commodity pickups are in the same route as their dropoffs.
-    @addConstraint(model, sum{y[p,commodities[p],i], i=VA} == 1)
+    @addConstraint(model, sum{y[commodities[p],p,i], i=VA} == 1)
   end
 
   for k in CA
