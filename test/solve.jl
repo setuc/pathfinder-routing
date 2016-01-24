@@ -140,6 +140,6 @@ expected = []
 push!(expected, [1, 3, 4, 5, 6])
 push!(expected, [2])
 
-route = PathfinderRouting.optimize(transports, commodities, transpose(hcat(distances...)), transpose(hcat(distances...)), capacities, parameters, objective)
+route = PathfinderRouting.optimize(transports, commodities, transpose(hcat(distances...)), transpose(hcat(distances...)), capacities, parameters, objective, 0)
 
-@test route = expected
+@test route == expected

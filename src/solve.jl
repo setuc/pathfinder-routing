@@ -4,7 +4,7 @@ original = """
 using JuMP
 using Logging
 
-function routecalculation(transports, commodities, distances, durations, capacities, parameters)
+function routecalculation(transports, commodities, distances, durations, capacities, parameters, now)
   TA = transports
   DA = [p for p=keys(commodities)]
   PA = [d for d=values(commodities)]
@@ -14,7 +14,6 @@ function routecalculation(transports, commodities, distances, durations, capacit
   info("Capacities: ", capacities)
 
   model = Model()
-  now = time()
 
   @defVar(model, pickup_time[DA], Int)
   @defVar(model, dropoff_time[DA], Int)
@@ -193,7 +192,7 @@ end
 
 """
 
-function optimize(transports, commodities, distances, durations, capacities, parameters, objective)
+function optimize(transports, commodities, distances, durations, capacities, parameters, objective, now = time())
   code = replace(original, "FUCKTHIS", objective)
-  return include_string(code)(transports, commodities, distances, durations, capacities, parameters)
+  return include_string(code)(transports, commodities, distances, durations, capacities, parameters, now)
 end
