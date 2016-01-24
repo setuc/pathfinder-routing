@@ -4,12 +4,12 @@ original = """
 using JuMP
 using Logging
 
-function routecalculation(vehicles, commodities, distances, durations, capacities, parameters)
-  VA = vehicles
+function routecalculation(transports, commodities, distances, durations, capacities, parameters)
+  TA = transports
   DA = [p for p=keys(commodities)]
   PA = [d for d=values(commodities)]
-  CA = setdiff(union(PA, DA), VA)
-  RA = union(PA, DA, VA)
+  CA = setdiff(union(PA, DA), TA)
+  RA = union(PA, DA, TA)
 
   info("Capacities: ", capacities)
 
@@ -21,23 +21,23 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
   @defVar(model, distance[RA], Int)
   @defVar(model, duration[TA], Int)
 
-  # x[k1,k2,i] = vehicle i's path contains an edge from k1 to k2
-  @defVar(model, 0 <= x[RA,RA,VA] <= 1, Int)
+  # x[k1,k2,i] = transport i's path contains an edge from k1 to k2
+  @defVar(model, 0 <= x[RA,RA,TA] <= 1, Int)
 
-  # y[k1,k2,i] = vehicle i's path contains a subpath from k1 to k2
-  @defVar(model, 0 <= y[RA,RA,VA] <= 1, Int)
+  # y[k1,k2,i] = transport i's path contains a subpath from k1 to k2
+  @defVar(model, 0 <= y[RA,RA,TA] <= 1, Int)
 
-  # z[k1,k2,k3] = the subpath starting at a vehicle and ending at k3 contains
+  # z[k1,k2,k3] = the subpath starting at a transport and ending at k3 contains
   # an edge from k1 to k2
   @defVar(model, 0 <= z[RA,RA,CA] <= 1, Int)
 
-  @defVar(model, r[RA,RA,VA], Int)
-  @defVar(model, rpos[RA,RA,VA] >= 0, Int)
-  @defVar(model, rneg[RA,RA,VA] >= 0, Int)
+  @defVar(model, r[RA,RA,TA], Int)
+  @defVar(model, rpos[RA,RA,TA] >= 0, Int)
+  @defVar(model, rneg[RA,RA,TA] >= 0, Int)
 
-  @defVar(model, q[RA,RA,VA], Int)
-  @defVar(model, qpos[RA,RA,VA] >= 0, Int)
-  @defVar(model, qneg[RA,RA,VA] >= 0, Int)
+  @defVar(model, q[RA,RA,TA], Int)
+  @defVar(model, qpos[RA,RA,TA] >= 0, Int)
+  @defVar(model, qneg[RA,RA,TA] >= 0, Int)
 
   for i in TA
     @addConstraint(model, duration[i] == sum{durations[k1,k2]*x[k1,k2,i],k1=RA,k2=RA})
@@ -50,7 +50,7 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
 
   for c in capacities
     for k2 in CA
-      for i in VA
+      for i in TA
         # Every route segment obeys constraint limits
         @addConstraint(model, sum{c[k1]*y[k1,k2,i], k1=CA} <= c[i])
       end
@@ -61,17 +61,17 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
     for k2 in RA
       for k3 in CA
         # Definition of z
-        @addConstraint(model, 2*z[k1,k2,k3] <= sum{x[k1,k2,i]+y[k1,k3,i], i=VA})
-        @addConstraint(model, z[k1,k2,k3] >= sum{x[k1,k2,i]+y[k1,k3,i], i=VA} - 1)
+        @addConstraint(model, 2*z[k1,k2,k3] <= sum{x[k1,k2,i]+y[k1,k3,i], i=TA})
+        @addConstraint(model, z[k1,k2,k3] >= sum{x[k1,k2,i]+y[k1,k3,i], i=TA} - 1)
       end
     end
   end
 
   for k1 in RA
     # Every node has at most one sucessor.
-    @addConstraint(model, sum{x[k1,k2,i], k2=RA, i=VA} <= 1)
+    @addConstraint(model, sum{x[k1,k2,i], k2=RA, i=TA} <= 1)
     for k2 in RA
-      for i in VA
+      for i in TA
         # Definition of r
         @addConstraint(model, r[k1,k2,i] == sum{y[k3,k2,i] - y[k3,k1,i], k3=RA} - 1)
         @addConstraint(model, r[k1,k2,i] == rpos[k1,k2,i] - rneg[k1,k2,i])
@@ -91,7 +91,7 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
   end
 
   for k in RA
-    for i in VA
+    for i in TA
       # A route action cannot occur before itself.
       @addConstraint(model, x[k,k,i] == 0)
       @addConstraint(model, y[k,k,i] == 0)
@@ -100,7 +100,7 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
 
   for d in keys(commodities)
     # Commodity pickups are in the same route as their dropoffs.
-    @addConstraint(model, sum{y[commodities[d],d,i], i=VA} == 1)
+    @addConstraint(model, sum{y[commodities[d],d,i], i=TA} == 1)
     if commodities[d] in CA
       @addConstraint(model, pickup_time[d] - now == sum{z[k1,k2,commodities[d]]*durations[k1,k2],k1=RA,k2=RA})
     end
@@ -109,8 +109,8 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
 
   for k in CA
     # Every CA has a predecessor.
-    @addConstraint(model, sum{x[a,k,i], a=RA, i=VA} == 1)
-    for i in VA
+    @addConstraint(model, sum{x[a,k,i], a=RA, i=TA} == 1)
+    for i in TA
       # Flow into and out of a vertex occur in the same route.
       @addConstraint(model, sum{x[a,k,i]-x[k,a,i], a=RA} >= 0)
     end
@@ -119,7 +119,7 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
   for a in RA
     for b in CA
       for c in CA
-        for i in VA
+        for i in TA
           @addConstraint(model, y[a,b,i] >= x[a,c,i] + y[c,b,i] - 1)
         end
       end
@@ -127,28 +127,28 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
   end
 
   for k1 in CA
-    @addConstraint(model, sum{y[k3,k1,i], i=VA, k3=RA} >= 1)
+    @addConstraint(model, sum{y[k3,k1,i], i=TA, k3=RA} >= 1)
     for k2 in RA
-      @addConstraint(model, sum{y[k1,k2,i] + y[k2,k1,i], i=VA} <= 1)
+      @addConstraint(model, sum{y[k1,k2,i] + y[k2,k1,i], i=TA} <= 1)
     end
   end
 
 
   for k1 in RA
-    for k2 in VA
-      for i in VA
-        # A vehicle start action does not have a predecessor.
+    for k2 in TA
+      for i in TA
+        # A transport start action does not have a predecessor.
         @addConstraint(model, x[k1,k2,i] == 0)
         if k2 != i
-          # A vehicle cannot be in another vehicle's route.
+          # A transport cannot be in another transport's route.
           @addConstraint(model, x[k2, k1, i] == 0)
         end
       end
     end
   end
 
-  for k1 in VA
-    for i in VA
+  for k1 in TA
+    for i in TA
       if k1 != i
         for k2 in RA
           @addConstraint(model, x[k1,k2,i] == 0)
@@ -159,7 +159,7 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
 
   for k2 in CA
     # Every non-starting vertex has exactly one predecessor.
-    @addConstraint(model, sum{x[k1,k2,i], k1=RA, i=VA} == 1)
+    @addConstraint(model, sum{x[k1,k2,i], k1=RA, i=TA} == 1)
   end
 
   FUCKTHIS
@@ -169,7 +169,7 @@ function routecalculation(vehicles, commodities, distances, durations, capacitie
 
   solveroutput = getValue(x)
   routes = []
-  for i in VA
+  for i in TA
     components = Dict()
     for k1 in RA
       for k2 in RA
@@ -193,7 +193,7 @@ end
 
 """
 
-function optimize(vehicles, commodities, distances, durations, capacities, parameters, objective)
+function optimize(transports, commodities, distances, durations, capacities, parameters, objective)
   code = replace(original, "FUCKTHIS", objective)
-  return include_string(code)(vehicles, commodities, distances, durations, capacities, parameters)
+  return include_string(code)(transports, commodities, distances, durations, capacities, parameters)
 end

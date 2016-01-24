@@ -7,7 +7,7 @@ Logging.configure(level=DEBUG)
 
 include("solve.jl")
 
-function parsevehicles(raw)
+function parsetransports(raw)
   return raw["vehicles"]
 end
 
@@ -46,14 +46,14 @@ function startserver()
   http = HttpHandler() do req::Request, res::Response
     info("Received route request: ", JSON.parse(bytestring(req.data)))
     jsonreq = JSON.parse(bytestring(req.data))
-    vehicles = parsevehicles(jsonreq)
+    transports = parsetransports(jsonreq)
     commodities = parsecommodities(jsonreq)
     capacities = parsecapacities(jsonreq)
     parameters = parseparameters(jsonreq)
     distances = parsedistances(jsonreq)
     durations = parsedurations(jsonreq)
     objective = parseobjective(jsonreq)
-    result = optimize(vehicles, commodities, distances, durations, capacities, parameters, objective)
+    result = optimize(transports, commodities, distances, durations, capacities, parameters, objective)
     response = JSON.json(Dict("routes" => result))
     info("Returning response: ", response)
     return Response(response)
