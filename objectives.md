@@ -307,31 +307,19 @@ A route is a partition of the set of route actions for a cluster into disjoint d
         
         @defVar(model, _value, Int)
         @defVar(model, _tmp1[DA,DA], Int)
-        for c1 in DA
-            for c2 in DA
-                @addConstraint(model, _tmp1[c1,c2] == dropoff_time[c1] - parameters["request_time"][c1])
-            end
-        end
         @defVar(model, _tmp2[DA,DA], Int)
-        for c1 in DA
-            for c2 in DA
-                @addConstraint(model, _tmp2[c1,c2] == dropoff_time[c2] - parameters["request_time"][c2])
-            end
-        end
         @defVar(model, _tmp3[DA,DA], Int)
-        for c1 in DA
-            for c2 in DA
-                @addConstraint(model, _tmp3[c1,c2] == _tmp1[c1,c2] - _tmp2[c1,c2])
-            end
-        end
         @defVar(model, _tmp4[DA,DA], Int)
-        @defVar(model, _tmp4pos[DA,DA] >= 0, Int)
-        @defVar(model, _tmp4neg[DA,DA] >= 0, Int)
+        @defVar(model, pos_tmp4[DA,DA] >= 0, Int)
+        @defVar(model, neg_tmp4[DA,DA] >= 0, Int)
         for c1 in DA
-            for c2 in DA
-                @addConstraint(model, _tmp4[c1,c2] == _tmp4pos[c1,c2] + _tmp4neg[c1,c2])
-                @addConstraint(model, _tmp4pos[c1,c2] - _tmp4neg[c1,c2] == _tmp3[c1,c2])
-            end
+        for c2 in DA
+        @addConstraint(model, _tmp1[c1,c2] == dropoff_time[c1] - parameters["request_time"][c1])
+        @addConstraint(model, _tmp2[c1,c2] == dropoff_time[c2] - parameters["request_time"][c2])
+        @addConstraint(model, _tmp3[c1,c2] == _tmp1[c1,c2] - _tmp2[c1,c2])
+        @addConstraint(model, _tmp4[c1,c2] == pos_tmp4[c1,c2] + neg_tmp4[c1,c2])
+        @addConstraint(model, _tmp3[c1,c2] == pos_tmp4[c1,c2] - neg_tmp4[c1,c2])
+        end
         end
         @addConstraint(model, _value == sum{_tmp4[c1,c2],c1=DA,c2=DA})
         @setObjective(model, Min, _value)
@@ -346,13 +334,13 @@ A route is a partition of the set of route actions for a cluster into disjoint d
                 c2: commodity
         quantity:
             absolute_value:
-                subtract:
+                - subtract:
                     - subtract:
                         - c1.dropoff_time
                         - c1.request_time
                     - subtract:
                         - c2.dropoff_time
-                        - c2.dropoff_time
+                        - c2.request_time
 
 # DSL Concepts
 

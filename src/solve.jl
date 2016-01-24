@@ -4,7 +4,7 @@ original = """
 using JuMP
 using Logging
 
-function routecalculation(vehicles, commodities, distance, duration, capacities, parameters)
+function routecalculation(vehicles, commodities, distances, durations, capacities, parameters)
   VA = vehicles
   DA = [p for p=keys(commodities)]
   PA = [d for d=values(commodities)]
@@ -18,6 +18,8 @@ function routecalculation(vehicles, commodities, distance, duration, capacities,
 
   @defVar(model, pickup_time[DA], Int)
   @defVar(model, dropoff_time[DA], Int)
+  @defVar(model, distance[RA], Int)
+  @defVar(model, duration[TA], Int)
 
   # x[k1,k2,i] = vehicle i's path contains an edge from k1 to k2
   @defVar(model, 0 <= x[RA,RA,VA] <= 1, Int)
@@ -36,6 +38,15 @@ function routecalculation(vehicles, commodities, distance, duration, capacities,
   @defVar(model, q[RA,RA,VA], Int)
   @defVar(model, qpos[RA,RA,VA] >= 0, Int)
   @defVar(model, qneg[RA,RA,VA] >= 0, Int)
+
+  for i in TA
+    @addConstraint(model, duration[i] == sum{durations[k1,k2]*x[k1,k2,i],k1=RA,k2=RA})
+    @addConstraint(model, distance[i] == sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA})
+  end
+
+  for c in DA
+    @addConstraint(model, distance[c] == sum{distances[k1,k2]*z[k1,k2,c],k1=RA,k2=RA})
+  end
 
   for c in capacities
     for k2 in CA
@@ -91,9 +102,9 @@ function routecalculation(vehicles, commodities, distance, duration, capacities,
     # Commodity pickups are in the same route as their dropoffs.
     @addConstraint(model, sum{y[commodities[d],d,i], i=VA} == 1)
     if commodities[d] in CA
-      @addConstraint(model, pickup_time[d] - now == sum{z[k1,k2,commodities[d]]*duration[k1,k2],k1=RA,k2=RA})
+      @addConstraint(model, pickup_time[d] - now == sum{z[k1,k2,commodities[d]]*durations[k1,k2],k1=RA,k2=RA})
     end
-    @addConstraint(model, dropoff_time[d] - now == sum{z[k1,k2,d]*duration[k1,k2],k1=RA,k2=RA})
+    @addConstraint(model, dropoff_time[d] - now == sum{z[k1,k2,d]*durations[k1,k2],k1=RA,k2=RA})
   end
 
   for k in CA
@@ -182,7 +193,7 @@ end
 
 """
 
-function optimize(vehicles, commodities, distance, duration, capacities, parameters, objective)
+function optimize(vehicles, commodities, distances, durations, capacities, parameters, objective)
   code = replace(original, "FUCKTHIS", objective)
-  return include_string(code)(vehicles, commodities, distance, duration, capacities, parameters)
+  return include_string(code)(vehicles, commodities, distances, durations, capacities, parameters)
 end

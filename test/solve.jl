@@ -1,7 +1,7 @@
 using Base.Test
 using PathfinderRouting
 
-ShortestDistance = "sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA}"
+ShortestDistance = "@setObjective(model, Min, sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA})"
 
 # Single optimal solution.
 
