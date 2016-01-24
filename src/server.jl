@@ -23,7 +23,7 @@ end
 
 function parseparameters(raw)
   parameters = raw["parameters"]
-  return [[parse(Int64, a) => parameters[p][a] for a=keys(parameters[p])] for p=keys(parameters)]
+  return [p => [parse(Int64, a) => parameters[p][a] for a=keys(parameters[p])] for p=keys(parameters)]
 end
 
 function parsedistances(raw)
