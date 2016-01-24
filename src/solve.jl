@@ -156,7 +156,7 @@ function routecalculation(VA, commodities, distances, durations, capacities)
 end
 """
 
-function optimize(vehicles, commodities, distances, durations, capacities, objective)
+function optimize(vehicles, commodities, distances, durations, capacities, parameters, objective)
   code = replace(original, "FUCKTHIS", objective)
   return include_string(code)(vehicles, commodities, distances, durations, capacities)
 end

@@ -25,26 +25,20 @@ def request_route(route_url):
       [ 0, 99, 0, 9, 0, 9 ],
       [ 9, 9, 9, 9, 9, 0 ],
     ],
-    'capacities': [
-      { 1: 1,
+    'capacities': {
+      'capacity': { 1: 1,
         2: -1,
         3: 1,
         4: 1,
         5: 0,
         6: -1
       }
-    ],
-    'commodityParameters': [
-      { 4: 4,
-        7: 0
+    },
+    'parameters': {
+      'mpg': {
+        1: 10
       }
-    ],
-    'vehicleParameters': [
-      { 1: 7,
-        3: 7,
-        5: 7
-      }
-    ],
+    },
     'objective': 'sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA}'
   }
   r = requests.post(route_url, json=data)
@@ -53,4 +47,4 @@ def request_route(route_url):
   
 
 if __name__ == '__main__':
-  request_route('http://localhost:2929')
+  request_route('http://routing.thepathfinder.xyz')

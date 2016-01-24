@@ -18,7 +18,12 @@ end
 
 function parsecapacities(raw)
   capacities = raw["capacities"]
-  return [[parse(Int64, a) => c[a] for a=keys(c)] for c=capacities]
+  return [[parse(Int64, a) => capacities[c][a] for a=keys(capacities[c])] for c=keys(capacities)]
+end
+
+function parseparameters(raw)
+  parameters = raw["parameters"]
+  return [[parse(Int64, a) => parameters[p][a] for a=keys(parameters[p])] for p=keys(parameters)]
 end
 
 function parsedistances(raw)
@@ -44,10 +49,11 @@ function startserver()
     vehicles = parsevehicles(jsonreq)
     commodities = parsecommodities(jsonreq)
     capacities = parsecapacities(jsonreq)
+    parameters = parseparameters(jsonreq)
     distances = parsedistances(jsonreq)
     durations = parsedurations(jsonreq)
     objective = parseobjective(jsonreq)
-    result = optimize(vehicles, commodities, distances, durations, capacities, objective)
+    result = optimize(vehicles, commodities, distances, durations, capacities, parameters, objective)
     response = JSON.json(Dict("routes" => result))
     info("Returning response: ", response)
     return Response(response)
