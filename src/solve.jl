@@ -21,14 +21,14 @@ function routecalculation(transports, commodities, distances, durations, capacit
   @defVar(model, duration[TA], Int)
 
   # x[k1,k2,i] = transport i's path contains an edge from k1 to k2
-  @defVar(model, 0 <= x[RA,RA,TA] <= 1, Int)
+  @defVar(model, x[RA,RA,TA], Bin)
 
   # y[k1,k2,i] = transport i's path contains a subpath from k1 to k2
-  @defVar(model, 0 <= y[RA,RA,TA] <= 1, Int)
+  @defVar(model, y[RA,RA,TA], Bin)
 
   # z[k1,k2,k3] = the subpath starting at a transport and ending at k3 contains
   # an edge from k1 to k2
-  @defVar(model, 0 <= z[RA,RA,CA] <= 1, Int)
+  @defVar(model, z[RA,RA,CA], Bin)
 
   @defVar(model, r[RA,RA,TA], Int)
   @defVar(model, rpos[RA,RA,TA] >= 0, Int)
@@ -172,7 +172,7 @@ function routecalculation(transports, commodities, distances, durations, capacit
     components = Dict()
     for k1 in RA
       for k2 in RA
-        if solveroutput[k1,k2,i] == 1
+        if solveroutput[k1,k2,i] > 0.9
           components[k1] = k2
         end
       end
