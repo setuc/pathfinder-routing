@@ -18,7 +18,7 @@ function routecalculation(transports, commodities, distances, durations, capacit
   @defVar(model, pickup_time[DA])
   @defVar(model, dropoff_time[DA])
   @defVar(model, distance[RA] >= 0, Int)
-  @defVar(model, duration[TA] >= 1, Int)
+  @defVar(model, duration[TA] >= 0, Int)
 
   # x[k1,k2,i] = transport i's path contains an edge from k1 to k2
   @defVar(model, x[RA,RA,TA], Bin)
@@ -126,7 +126,7 @@ function routecalculation(transports, commodities, distances, durations, capacit
   end
 
   for k1 in CA
-    @addConstraint(model, sum{y[i,k1,i], i=TA} >= 1)
+    @addConstraint(model, sum{y[i,k1,i], i=TA} == 1)
     for k2 in RA
       if k1 != k2
         @addConstraint(model, sum{y[k1,k2,i] + y[k2,k1,i], i=TA} <= 1)
