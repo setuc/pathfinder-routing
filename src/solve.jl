@@ -4,7 +4,8 @@ original = """
 using JuMP
 using Logging
 
-function routecalculation(transports, commodities, distances, durations, capacities, parameters, now)
+function routecalculation(transports, commodities, distances, durations, capacities, parameters, nowf)
+  now = round(Int, nowf)
   TA = transports
   DA = [p for p=keys(commodities)]
   PA = [d for d=values(commodities)]

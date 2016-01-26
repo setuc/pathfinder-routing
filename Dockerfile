@@ -12,7 +12,7 @@ RUN julia -e "Pkg.resolve()"
 # Dependencies
 ADD REQUIRE /.julia/v0.4/REQUIRE
 RUN julia -e "Pkg.resolve()"
-RUN julia -e 'Pkg.add("Cbc")'
+RUN julia -e 'Pkg.add("Clp")'
 RUN julia -e 'Pkg.add("HttpServer")'
 RUN julia -e 'Pkg.add("JuMP")'
 RUN julia -e 'Pkg.add("JSON")'
