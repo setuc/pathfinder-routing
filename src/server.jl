@@ -42,10 +42,7 @@ function parseobjective(raw)
   end
 end
 
-function startserver()
-  http = HttpHandler() do req::Request, res::Response
-    info("Received route request: ", JSON.parse(bytestring(req.data)))
-    jsonreq = JSON.parse(bytestring(req.data))
+function handle(jsonreq)
     transports = parsetransports(jsonreq)
     commodities = parsecommodities(jsonreq)
     capacities = parsecapacities(jsonreq)
@@ -53,7 +50,14 @@ function startserver()
     distances = parsedistances(jsonreq)
     durations = parsedurations(jsonreq)
     objective = parseobjective(jsonreq)
-    result = optimize(transports, commodities, distances, durations, capacities, parameters, objective)
+    return optimize(transports, commodities, distances, durations, capacities, parameters, objective)
+end
+
+function startserver()
+  http = HttpHandler() do req::Request, res::Response
+    info("Received route request: ", JSON.parse(bytestring(req.data)))
+    jsonreq = JSON.parse(bytestring(req.data))
+    result = handle(jsonreq)
     response = JSON.json(Dict("routes" => result))
     info("Returning response: ", response)
     return Response(response)

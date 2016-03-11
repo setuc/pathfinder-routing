@@ -26,7 +26,8 @@ def request_route(route_url):
       [ 9, 9, 9, 9, 9, 0 ],
     ],
     'capacities': {
-      'capacity': { 1: 1,
+      'capacity': {
+        1: 1,
         2: -1,
         3: 1,
         4: 1,
@@ -39,9 +40,13 @@ def request_route(route_url):
         1: 10
       }
     },
-    'objective': 'sum{distances[k1,k2]*x[k1,k2,i],k1=RA,k2=RA,i=VA}'
+    'objective': """
+    @setObjective(model, Min, sum{distance[i],i=TA})
+    """
   }
   r = requests.post(route_url, json=data)
+  print dir(r)
+  print r.text
   print 'Status code: ' + str(r.status_code)
   print 'Response json: ' + str(r.json())
   
