@@ -19,7 +19,7 @@ function routecalculation(transports, commodities, distances, durations, capacit
   @defVar(model, pickup_time[DA])
   @defVar(model, dropoff_time[DA])
   @defVar(model, distance[RA] >= 0, Int)
-  @defVar(model, duration[TA] >= 0, Int)
+  @defVar(model, duration[RA] >= 0, Int)
 
   # x[k1,k2,i] = transport i's path contains an edge from k1 to k2
   @defVar(model, x[RA,RA,TA], Bin)
