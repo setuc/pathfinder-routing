@@ -1,7 +1,10 @@
 package xyz.thepathfinder.routing.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import xyz.thepathfinder.routing.domain.RoutingSolution;
 
 public class ProblemDescription {
     private List<Integer> vehicles;
@@ -68,8 +71,20 @@ public class ProblemDescription {
         return objective;
     }
 
+    public RoutingSolution createEmptyRoutingSolution() {
+        return new RoutingSolution();
+    }
+
     @Override
     public String toString() {
-        return objective;
+        return new StringBuilder()
+            .append("Vehicles: ").append(vehicles).append("\n")
+            .append("Commodities: " ).append(commodities).append("\n")
+            .append("Distances: ").append(Arrays.deepToString(distances)).append("\n")
+            .append("Durations: ").append(Arrays.deepToString(durations)).append("\n")
+            .append("Capacities: ").append(capacities).append("\n")
+            .append("Parameters: ").append(parameters).append("\n")
+            .append("Objective: ").append(objective)
+            .toString();
     }
 }

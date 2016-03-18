@@ -8,7 +8,8 @@ import xyz.thepathfinder.routing.domain.RoutingSolution;
 
 public class RoutingScoreCalculator implements EasyScoreCalculator<RoutingSolution> {
 
-    @Override public Score calculateScore(RoutingSolution solution) {
+    @Override
+    public Score calculateScore(RoutingSolution solution) {
         long hardScore = 0L;
         long softScore = 0L;
         return HardSoftLongScore.valueOf(hardScore, softScore);

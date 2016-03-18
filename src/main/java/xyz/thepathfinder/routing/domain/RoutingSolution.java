@@ -7,8 +7,11 @@ import org.optaplanner.core.api.domain.valuerange.ValueRangeProvider;
 import org.optaplanner.core.api.score.buildin.hardsoftlong.HardSoftLongScore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import xyz.thepathfinder.routing.service.ProblemSolution;
 
 @PlanningSolution
 public class RoutingSolution implements Solution<HardSoftLongScore> {
@@ -28,8 +31,11 @@ public class RoutingSolution implements Solution<HardSoftLongScore> {
     }
 
     @Override
-    public Collection<? extends Object> getProblemFacts() {
-        return new ArrayList<>();
+    public Collection<? extends RouteAction> getProblemFacts() {
+        List<RouteAction> routeActions = new ArrayList<>();
+        routeActions.addAll(transportList);
+        routeActions.addAll(commodityActionList);
+        return routeActions;
     }
 
     @PlanningEntityCollectionProperty
@@ -38,9 +44,17 @@ public class RoutingSolution implements Solution<HardSoftLongScore> {
         return transportList;
     }
 
+    public void setTransportList(List<Transport> transports) {
+        transportList = transports;
+    }
+
     @PlanningEntityCollectionProperty
     @ValueRangeProvider(id = "commodityActionRange")
     public List<CommodityAction> getCommodityActionList() {
         return commodityActionList;
+    }
+
+    public ProblemSolution getProblemSolution() {
+        return new ProblemSolution(Arrays.asList(Arrays.asList(1, 2, 3)));
     }
 }
