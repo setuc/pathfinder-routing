@@ -1,0 +1,26 @@
+group 'xyz.thepathfinder.routing'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'war'
+
+mainClassName = 'xyz.thepathfinder.routing.Main'
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'http://repository.jboss.org/nexus/content/groups/public-jboss'
+    }
+}
+
+dependencies {
+    compile 'com.sun.jersey:jersey-core:1.19.1'
+    compile 'com.sun.jersey:jersey-json:1.19.1'
+    compile 'com.sun.jersey:jersey-server:1.19.1'
+    compile 'com.sun.jersey:jersey-servlet:1.19.1'
+    compile 'javax.ws.rs:jsr311-api:1.1.1'
+    compile 'org.optaplanner:optaplanner-core:6.3.0.Final'
+    compile 'org.slf4j:slf4j-api:1.7.19'
+    compile 'org.slf4j:slf4j-simple:1.7.19'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}

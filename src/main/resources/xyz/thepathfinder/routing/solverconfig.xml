@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solver>
+    <solutionClass>xyz.thepathfinder.routing.domain.RoutingSolution</solutionClass>
+    <entityClass>xyz.thepathfinder.routing.domain.CommodityAction</entityClass>
+    <entityClass>xyz.thepathfinder.routing.domain.RouteAction</entityClass>
+
+    <scoreDirectorFactory>
+        <scoreDefinitionType>HARD_SOFT_LONG</scoreDefinitionType>
+        <easyScoreCalculatorClass>xyz.thepathfinder.routing.score.RoutingScoreCalculator</easyScoreCalculatorClass>\
+        <initializingScoreTrend>ONLY_DOWN</initializingScoreTrend>
+    </scoreDirectorFactory>
+
+    <termination>
+        <minutesSpentLimit>5</minutesSpentLimit>
+    </termination>
+    <localSearch>
+        <unionMoveSelector>
+            <changeMoveSelector/>
+            <swapMoveSelector/>
+            <subChainChangeMoveSelector>
+                <selectReversingMoveToo>true</selectReversingMoveToo>
+            </subChainChangeMoveSelector>
+            <subChainSwapMoveSelector>
+                <selectReversingMoveToo>true</selectReversingMoveToo>
+            </subChainSwapMoveSelector>
+        </unionMoveSelector>
+        <acceptor>
+            <lateAcceptanceSize>200</lateAcceptanceSize>
+        </acceptor>
+        <forager>
+            <acceptedCountLimit>1</acceptedCountLimit>
+        </forager>
+    </localSearch>
+</solver>

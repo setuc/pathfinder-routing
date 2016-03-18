@@ -1,0 +1,17 @@
+*.iml
+*.idea
+.gradle
+build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+.DS_Store
+/*.java
+/src/main/flex/*.java
+/src/main/java/edu/rosehulman/minijavac/generated
+*~
+gradle
+gradlew
+gradlew.bat
+settings.gradle
+out/
