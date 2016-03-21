@@ -1,13 +1,13 @@
 package xyz.thepathfinder.routing.domain;
 
 public class CommodityDropoff extends CommodityAction {
-    CommodityPickup pickup;
+    RouteAction pickup;
 
-    public CommodityPickup getPickup() {
+    public RouteAction getPickup() {
         return this.pickup;
     }
 
-    public void setPickup(CommodityPickup pickup) {
+    public void setPickup(RouteAction pickup) {
         this.pickup = pickup;
     }
 }

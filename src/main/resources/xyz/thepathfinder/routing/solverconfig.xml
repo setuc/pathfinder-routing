@@ -11,8 +11,12 @@
     </scoreDirectorFactory>
 
     <termination>
-        <minutesSpentLimit>5</minutesSpentLimit>
+        <minutesSpentLimit>2</minutesSpentLimit>
+        <unimprovedSecondsSpentLimit>3</unimprovedSecondsSpentLimit>
     </termination>
+    <constructionHeuristic>
+        <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
+    </constructionHeuristic>
     <localSearch>
         <unionMoveSelector>
             <changeMoveSelector/>

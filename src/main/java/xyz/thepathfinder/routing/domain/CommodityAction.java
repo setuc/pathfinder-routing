@@ -5,12 +5,17 @@ import org.optaplanner.core.api.domain.variable.AnchorShadowVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
-@PlanningEntity
+import java.util.Map;
+
+import xyz.thepathfinder.routing.score.NaiveDifficultyComparator;
+
+@PlanningEntity(difficultyComparatorClass = NaiveDifficultyComparator.class)
 public abstract class CommodityAction implements RouteAction {
     Location location;
     Transport transport;
     CommodityAction nextCommodityAction;
     RouteAction previousRouteAction;
+    Map<RouteAction, Long> distances;
 
     @Override
     public Location getLocation() {
@@ -45,5 +50,13 @@ public abstract class CommodityAction implements RouteAction {
 
     public void setPreviousRouteAction(RouteAction routeAction) {
         previousRouteAction = routeAction;
+    }
+
+    public long distanceTo(RouteAction routeAction) {
+        return distances.get(routeAction);
+    }
+
+    public void setDistances(Map<RouteAction, Long> distances) {
+        this.distances = distances;
     }
 }

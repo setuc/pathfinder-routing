@@ -2,6 +2,9 @@ group 'xyz.thepathfinder.routing'
 
 apply plugin: 'java'
 apply plugin: 'war'
+apply plugin: 'application'
+
+mainClassName = 'xyz.thepathfinder.routing.Main'
 
 repositories {
     mavenCentral()

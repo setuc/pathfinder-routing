@@ -54,6 +54,10 @@ public class RoutingSolution implements Solution<HardSoftLongScore> {
         return commodityActionList;
     }
 
+    public void setCommodityActionList(List<CommodityAction> commodityActions) {
+        commodityActionList = commodityActions;
+    }
+
     public ProblemSolution getProblemSolution() {
         return new ProblemSolution(Arrays.asList(Arrays.asList(1, 2, 3)));
     }
