@@ -6,10 +6,15 @@ import org.optaplanner.core.api.domain.variable.InverseRelationShadowVariable;
 @PlanningEntity
 public interface RouteAction {
 
-    Location getLocation();
     Transport getTransport();
 
     @InverseRelationShadowVariable(sourceVariableName =  "previousRouteAction")
     CommodityAction getNextCommodityAction();
     void setNextCommodityAction(CommodityAction commodityAction);
+
+    long distanceTo(RouteAction routeAction);
+
+    void setDistance(RouteAction routeAction, long distance);
+
+    int id();
 }

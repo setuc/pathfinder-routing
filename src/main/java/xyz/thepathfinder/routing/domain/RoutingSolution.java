@@ -10,8 +10,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import xyz.thepathfinder.routing.service.ProblemSolution;
+
+import static java.util.stream.Collectors.toList;
 
 @PlanningSolution
 public class RoutingSolution implements Solution<HardSoftLongScore> {
@@ -56,9 +60,5 @@ public class RoutingSolution implements Solution<HardSoftLongScore> {
 
     public void setCommodityActionList(List<CommodityAction> commodityActions) {
         commodityActionList = commodityActions;
-    }
-
-    public ProblemSolution getProblemSolution() {
-        return new ProblemSolution(Arrays.asList(Arrays.asList(1, 2, 3)));
     }
 }

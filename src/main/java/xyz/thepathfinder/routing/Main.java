@@ -22,14 +22,14 @@ public class Main {
         SolverFactory solverFactory = SolverFactory.createFromXmlResource(SOLVER_CONFIG);
         Solver solver = solverFactory.buildSolver();
         RoutingSolution routingSolution = new RoutingSolution();
-        Transport transport1 = new Transport();
-        Transport transport2 = new Transport();
+        Transport transport1 = new Transport(1);
+        Transport transport2 = new Transport(2);
         List<Transport> transports = Arrays.asList(
             transport1,
             transport2
         );
-        CommodityPickup commodityAction1 = new CommodityPickup();
-        CommodityDropoff commodityAction2 = new CommodityDropoff();
+        CommodityPickup commodityAction1 = new CommodityPickup(3);
+        CommodityDropoff commodityAction2 = new CommodityDropoff(4);
         List<CommodityAction> commodityActions = Arrays.asList(
             commodityAction1,
             commodityAction2

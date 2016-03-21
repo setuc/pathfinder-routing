@@ -28,6 +28,6 @@ public class RoutingService {
         Solver solver = solverFactory.buildSolver();
         RoutingSolution routingSolution = problemDescription.createEmptyRoutingSolution();
         solver.solve(routingSolution);
-        return routingSolution.getProblemSolution();
+        return ProblemSolution.create((RoutingSolution) solver.getBestSolution());
     }
 }

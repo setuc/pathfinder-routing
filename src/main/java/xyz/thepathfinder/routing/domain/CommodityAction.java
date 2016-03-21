@@ -5,22 +5,18 @@ import org.optaplanner.core.api.domain.variable.AnchorShadowVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariable;
 import org.optaplanner.core.api.domain.variable.PlanningVariableGraphType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import xyz.thepathfinder.routing.score.NaiveDifficultyComparator;
 
 @PlanningEntity(difficultyComparatorClass = NaiveDifficultyComparator.class)
 public abstract class CommodityAction implements RouteAction {
-    Location location;
     Transport transport;
     CommodityAction nextCommodityAction;
     RouteAction previousRouteAction;
-    Map<RouteAction, Long> distances;
-
-    @Override
-    public Location getLocation() {
-        return location;
-    }
+    Map<RouteAction, Long> distances = new HashMap<>();
+    int id;
 
     @Override
     @AnchorShadowVariable(sourceVariableName = "previousRouteAction")
@@ -52,11 +48,18 @@ public abstract class CommodityAction implements RouteAction {
         previousRouteAction = routeAction;
     }
 
+    @Override
     public long distanceTo(RouteAction routeAction) {
         return distances.get(routeAction);
     }
 
-    public void setDistances(Map<RouteAction, Long> distances) {
-        this.distances = distances;
+    @Override
+    public void setDistance(RouteAction routeAction, long distance) {
+        distances.put(routeAction, distance);
+    }
+
+    @Override
+    public int id() {
+        return id;
     }
 }

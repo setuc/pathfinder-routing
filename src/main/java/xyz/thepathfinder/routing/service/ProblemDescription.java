@@ -1,10 +1,20 @@
 package xyz.thepathfinder.routing.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import xyz.thepathfinder.routing.domain.CommodityAction;
+import xyz.thepathfinder.routing.domain.CommodityDropoff;
+import xyz.thepathfinder.routing.domain.CommodityPickup;
+import xyz.thepathfinder.routing.domain.RouteAction;
 import xyz.thepathfinder.routing.domain.RoutingSolution;
+import xyz.thepathfinder.routing.domain.Transport;
+
+import static java.util.function.Function.identity;
 
 public class ProblemDescription {
     private List<Integer> vehicles;
@@ -72,7 +82,39 @@ public class ProblemDescription {
     }
 
     public RoutingSolution createEmptyRoutingSolution() {
-        return new RoutingSolution();
+        // Initialize transports and commodities
+        Map<Integer, Transport> transportMap = vehicles.stream().collect(Collectors.toMap(identity(), Transport::new));
+        Map<Integer, CommodityAction> commodityActions = new HashMap<>();
+        for (Map.Entry<Integer, Integer> commodityEntry : commodities.entrySet()) {
+            CommodityDropoff dropoff = new CommodityDropoff(commodityEntry.getKey());
+            commodityActions.put(commodityEntry.getKey(), dropoff);
+            if (transportMap.containsKey(commodityEntry.getKey())) {
+                dropoff.setPickup(transportMap.get(commodityEntry.getKey()));
+            } else {
+                CommodityPickup pickup = new CommodityPickup(commodityEntry.getValue());
+                commodityActions.put(commodityEntry.getValue(), pickup);
+                dropoff.setPickup(pickup);
+                pickup.setDropoff(dropoff);
+            }
+        }
+
+        // Set distance lists for route actions
+        Map<Integer, RouteAction> routeActions = new HashMap<>();
+        routeActions.putAll(transportMap);
+        routeActions.putAll(commodityActions);
+        for (int r = 0; r < distances.length; r++) {
+            for (int c = 0; c < distances.length; c++) {
+                if (distances[r][c] > 0) {
+                    routeActions.get(r+1).setDistance(routeActions.get(c+1), distances[r][c]);
+                }
+            }
+        }
+
+        // Construct solution
+        RoutingSolution solution = new RoutingSolution();
+        solution.setCommodityActionList(new ArrayList<>(commodityActions.values()));
+        solution.setTransportList(new ArrayList<>(transportMap.values()));
+        return solution;
     }
 
     @Override

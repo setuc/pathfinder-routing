@@ -1,16 +1,18 @@
 package xyz.thepathfinder.routing.domain;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Transport implements RouteAction {
 
-    Location startLocation;
     CommodityAction nextCommodityAction;
+    final int id;
+    Map<RouteAction, Long> distances = new HashMap<>();
 
-    @Override
-    public Location getLocation() {
-        return startLocation;
+    public Transport(int id) {
+        this.id = id;
     }
 
     @Override
@@ -36,5 +38,20 @@ public class Transport implements RouteAction {
             action = action.getNextCommodityAction();
         }
         return route;
+    }
+
+    @Override
+    public long distanceTo(RouteAction routeAction) {
+        return distances.get(routeAction);
+    }
+
+    @Override
+    public void setDistance(RouteAction routeAction, long distance) {
+        distances.put(routeAction, distance);
+    }
+
+    @Override
+    public int id() {
+        return id;
     }
 }
