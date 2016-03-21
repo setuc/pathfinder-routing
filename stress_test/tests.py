@@ -19,28 +19,7 @@ def data(t, c):
     'durations': distance_matrix,
     'distances': distance_matrix,
     'capacities': {
-      'capacity': {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0,
-        6: 0,
-        7: 100,
-        8: -1,
-        9: -1,
-        10: -1,
-        11: -1,
-        12: -1,
-        13: -1,
-        14: 1,
-        15: 1,
-        16: 1,
-        17: 1,
-        18: 1,
-        19: 1,
-      }
-      #'capacity': dict({t: 1 for t in transports}, **dict({commodities[d]: 1 for d in commodities}, **{d: -1 for d in commodities}))
+      'capacity': dict({t: 1 for t in transports}, **dict({commodities[d]: 1 for d in commodities}, **{d: -1 for d in commodities}))
     },
     'parameters': {
     },
@@ -60,7 +39,7 @@ def time_request(url, data):
 
 def test(t, c):
   #print "Time for {} transports and {} commodities".format(t, c)
-  time_request('http://routing.thepathfinder.xyz', data(t, c))
+  time_request('http://routing2.thepathfinder.xyz', data(t, c))
   #print 'Time: ' + str(time_request('http://routing2.thepathfinder.xyz', data(t, c)))
 
 def testlocal(t, c):
@@ -100,4 +79,31 @@ if __name__ == '__main__':
   print
   print '|T=9|',
   [test(9,c) for c in range(1, 3)]
+  print 'OLD'
+  print '|T=1|',
+  [testold(1,c) for c in range(1, 5)]
+  print
+  print '|T=2|',
+  [testold(2,c) for c in range(1, 4)]
+  print
+  print '|T=3|',
+  [testold(3,c) for c in range(1, 4)]
+  print
+  print '|T=4|',
+  [testold(4,c) for c in range(1, 4)]
+  print
+  print '|T=5|',
+  [testold(5,c) for c in range(1, 4)]
+  print
+  print '|T=6|',
+  [testold(6,c) for c in range(1, 3)]
+  print
+  print '|T=7|',
+  [testold(7,c) for c in range(1, 3)]
+  print
+  print '|T=8|',
+  [testold(8,c) for c in range(1, 3)]
+  print
+  print '|T=9|',
+  [testold(9,c) for c in range(1, 3)]
 
