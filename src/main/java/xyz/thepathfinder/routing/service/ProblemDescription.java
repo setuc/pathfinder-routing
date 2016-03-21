@@ -103,8 +103,9 @@ public class ProblemDescription {
         routeActions.putAll(transportMap);
         routeActions.putAll(commodityActions);
         for (int r = 0; r < distances.length; r++) {
-            for (int c = 0; c < distances.length; c++) {
-                if (distances[r][c] > 0) {
+            for (int c = 0; c < distances[r].length; c++) {
+                if (distances[r][c] > 0 && routeActions.containsKey(r+1) && routeActions.containsKey(c+1)) {
+                    System.out.println("Getting distance["+r+","+c+"]");
                     routeActions.get(r+1).setDistance(routeActions.get(c+1), distances[r][c]);
                 }
             }

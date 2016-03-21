@@ -8,8 +8,12 @@ import java.util.Map;
 public class Transport implements RouteAction {
 
     CommodityAction nextCommodityAction;
-    final int id;
+    int id;
     Map<RouteAction, Long> distances = new HashMap<>();
+
+    public Transport() {
+
+    }
 
     public Transport(int id) {
         this.id = id;
@@ -28,6 +32,17 @@ public class Transport implements RouteAction {
     @Override
     public void setNextCommodityAction(CommodityAction commodityAction) {
         nextCommodityAction = commodityAction;
+    }
+
+    public List<Integer> getPathfinderRoute() {
+        CommodityAction action = nextCommodityAction;
+        List<Integer> route = new ArrayList<>();
+        route.add(id);
+        while (action != null) {
+            route.add(action.id());
+            action = action.getNextCommodityAction();
+        }
+        return route;
     }
 
     public List<CommodityAction> getRoute() {

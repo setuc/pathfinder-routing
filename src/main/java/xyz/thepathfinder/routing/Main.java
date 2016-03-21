@@ -34,16 +34,12 @@ public class Main {
             commodityAction1,
             commodityAction2
         );
-        commodityAction1.setDistances(ImmutableMap.of(
-            commodityAction2, 2000L,
-            transport1, 2828L,
-            transport2, 4472L
-        ));
-        commodityAction2.setDistances(ImmutableMap.of(
-            commodityAction1, 2000L,
-            transport1, 2000L,
-            transport2, 4000L
-        ));
+        commodityAction1.setDistance(commodityAction2, 2000L);
+        commodityAction1.setDistance(transport1, 2828L);
+        commodityAction1.setDistance(transport2, 4472L);
+        commodityAction2.setDistance(commodityAction1, 2000L);
+        commodityAction2.setDistance(transport1, 2000L);
+        commodityAction2.setDistance(transport2, 4000L);
         commodityAction1.setDropoff(commodityAction2);
         commodityAction2.setPickup(commodityAction1);
         routingSolution.setTransportList(transports);

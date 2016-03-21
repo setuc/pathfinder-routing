@@ -50,7 +50,7 @@ public abstract class CommodityAction implements RouteAction {
 
     @Override
     public long distanceTo(RouteAction routeAction) {
-        return distances.get(routeAction);
+        return distances.getOrDefault(routeAction, Long.MAX_VALUE);
     }
 
     @Override

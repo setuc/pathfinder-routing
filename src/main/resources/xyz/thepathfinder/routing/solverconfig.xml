@@ -12,7 +12,7 @@
 
     <termination>
         <minutesSpentLimit>2</minutesSpentLimit>
-        <unimprovedSecondsSpentLimit>3</unimprovedSecondsSpentLimit>
+        <unimprovedSecondsSpentLimit>5</unimprovedSecondsSpentLimit>
     </termination>
     <constructionHeuristic>
         <constructionHeuristicType>FIRST_FIT_DECREASING</constructionHeuristicType>
