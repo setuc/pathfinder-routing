@@ -82,16 +82,28 @@ public class ProblemDescription {
     }
 
     public RoutingSolution createEmptyRoutingSolution() {
+        // Flip the capacities array
+        Map<Integer, Map<String, Integer>> flippedCapacities = new HashMap<>();
+        for (Map.Entry<String, Map<Integer, Integer>> capacityListEntry : capacities.entrySet()) {
+            for (Map.Entry<Integer, Integer> capacityEntry : capacityListEntry.getValue().entrySet()) {
+                flippedCapacities.putIfAbsent(capacityEntry.getKey(), new HashMap<>());
+                flippedCapacities.get(capacityEntry.getKey()).put(capacityListEntry.getKey(), capacityEntry.getValue());
+            }
+        }
+
         // Initialize transports and commodities
-        Map<Integer, Transport> transportMap = vehicles.stream().collect(Collectors.toMap(identity(), Transport::new));
+        Map<Integer, Transport> transportMap = vehicles.stream().collect(
+            Collectors.toMap(identity(), v -> new Transport(v, flippedCapacities.get(v))));
         Map<Integer, CommodityAction> commodityActions = new HashMap<>();
         for (Map.Entry<Integer, Integer> commodityEntry : commodities.entrySet()) {
-            CommodityDropoff dropoff = new CommodityDropoff(commodityEntry.getKey());
+            int dropoffId = commodityEntry.getKey();
+            CommodityDropoff dropoff = new CommodityDropoff(dropoffId, flippedCapacities.get(dropoffId));
             commodityActions.put(commodityEntry.getKey(), dropoff);
             if (transportMap.containsKey(commodityEntry.getKey())) {
                 dropoff.setPickup(transportMap.get(commodityEntry.getKey()));
             } else {
-                CommodityPickup pickup = new CommodityPickup(commodityEntry.getValue());
+                int pickupId = commodityEntry.getValue();
+                CommodityPickup pickup = new CommodityPickup(pickupId, flippedCapacities.get(pickupId));
                 commodityActions.put(commodityEntry.getValue(), pickup);
                 dropoff.setPickup(pickup);
                 pickup.setDropoff(dropoff);

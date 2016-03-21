@@ -10,13 +10,15 @@ public class Transport implements RouteAction {
     CommodityAction nextCommodityAction;
     int id;
     Map<RouteAction, Long> distances = new HashMap<>();
+    Map<String, Integer> capacities;
 
     public Transport() {
 
     }
 
-    public Transport(int id) {
+    public Transport(int id, Map<String, Integer> capacities) {
         this.id = id;
+        this.capacities = capacities;
     }
 
     @Override
@@ -68,5 +70,13 @@ public class Transport implements RouteAction {
     @Override
     public int id() {
         return id;
+    }
+
+    @Override public int getCapacity(String key) {
+        return capacities.getOrDefault(key, 0);
+    }
+
+    public Map<String, Integer> getCapacities() {
+        return capacities;
     }
 }

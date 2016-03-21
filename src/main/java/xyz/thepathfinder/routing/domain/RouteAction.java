@@ -17,4 +17,6 @@ public interface RouteAction {
     void setDistance(RouteAction routeAction, long distance);
 
     int id();
+
+    int getCapacity(String key);
 }

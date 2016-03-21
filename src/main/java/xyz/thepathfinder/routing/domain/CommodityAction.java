@@ -16,6 +16,7 @@ public abstract class CommodityAction implements RouteAction {
     CommodityAction nextCommodityAction;
     RouteAction previousRouteAction;
     Map<RouteAction, Long> distances = new HashMap<>();
+    Map<String, Integer> capacities;
     int id;
 
     @Override
@@ -61,5 +62,10 @@ public abstract class CommodityAction implements RouteAction {
     @Override
     public int id() {
         return id;
+    }
+
+    @Override
+    public int getCapacity(String key) {
+        return capacities.getOrDefault(key, 0);
     }
 }

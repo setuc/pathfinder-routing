@@ -3,9 +3,10 @@
 import json
 import requests
 import time
+import random
 
 M = 30
-distance_matrix = [[0 if r==c else 1 for c in range(0,30)] for r in range (0, 30)]
+distance_matrix = [[0 if r==c else random.choice(range(1, 100)) for c in range(0,30)] for r in range (0, 30)]
 
 def data(t, c):
   if t + 2*c > len(distance_matrix):
@@ -18,7 +19,28 @@ def data(t, c):
     'durations': distance_matrix,
     'distances': distance_matrix,
     'capacities': {
-      'capacity': dict({t: 1 for t in transports}, **dict({commodities[d]: 1 for d in commodities}, **{d: -1 for d in commodities}))
+      'capacity': {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 0,
+        7: 100,
+        8: -1,
+        9: -1,
+        10: -1,
+        11: -1,
+        12: -1,
+        13: -1,
+        14: 1,
+        15: 1,
+        16: 1,
+        17: 1,
+        18: 1,
+        19: 1,
+      }
+      #'capacity': dict({t: 1 for t in transports}, **dict({commodities[d]: 1 for d in commodities}, **{d: -1 for d in commodities}))
     },
     'parameters': {
     },
@@ -31,17 +53,21 @@ def time_request(url, data):
   start = time.time()
   r = requests.post(url, json=data)
   print "{0:.2f}".format(time.time() - start),
-  print " (",
-  print route_length(json.loads(r.text)['routes']),
-  print ")|",
+  print "(" + str(route_length(json.loads(r.text)['routes'])) +")|",
   #print r.status_code
   #print 'Length: ' + str(route_length(json.loads(r.text)['routes']))
   #return time.time() - start
 
 def test(t, c):
   #print "Time for {} transports and {} commodities".format(t, c)
-  time_request('http://routing2.thepathfinder.xyz', data(t, c))
+  time_request('http://routing.thepathfinder.xyz', data(t, c))
   #print 'Time: ' + str(time_request('http://routing2.thepathfinder.xyz', data(t, c)))
+
+def testlocal(t, c):
+  time_request('http://localhost:8080/routing', data(t, c))
+
+def testold(t, c):
+  time_request('http://routing.thepathfinder.xyz', data(t, c))
 
 def route_length(routes):
   #print 'Routes: ' + str(routes)
@@ -49,29 +75,29 @@ def route_length(routes):
 
 if __name__ == '__main__':
   print '|T=1|',
-  [test(1,c) for c in range(1, 7)]
+  [test(1,c) for c in range(1, 5)]
   print
   print '|T=2|',
-  [test(2,c) for c in range(1, 7)]
+  [test(2,c) for c in range(1, 4)]
   print
   print '|T=3|',
-  [test(3,c) for c in range(1, 7)]
+  [test(3,c) for c in range(1, 4)]
   print
   print '|T=4|',
-  [test(4,c) for c in range(1, 7)]
+  [test(4,c) for c in range(1, 4)]
   print
   print '|T=5|',
-  [test(5,c) for c in range(1, 7)]
+  [test(5,c) for c in range(1, 4)]
   print
   print '|T=6|',
-  [test(6,c) for c in range(1, 7)]
+  [test(6,c) for c in range(1, 3)]
   print
   print '|T=7|',
-  [test(7,c) for c in range(1, 7)]
+  [test(7,c) for c in range(1, 3)]
   print
   print '|T=8|',
-  [test(8,c) for c in range(1, 7)]
+  [test(8,c) for c in range(1, 3)]
   print
   print '|T=9|',
-  [test(9,c) for c in range(1, 7)]
+  [test(9,c) for c in range(1, 3)]
 
