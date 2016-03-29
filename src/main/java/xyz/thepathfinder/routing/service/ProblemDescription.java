@@ -17,7 +17,7 @@ import xyz.thepathfinder.routing.domain.Transport;
 import static java.util.function.Function.identity;
 
 public class ProblemDescription {
-    private List<Integer> vehicles;
+    private List<Integer> transports;
     private Map<Integer, Integer> commodities;
     private Integer[][] durations;
     private Integer[][] distances;
@@ -25,8 +25,8 @@ public class ProblemDescription {
     private Map<String, Map<Integer, Integer>> parameters;
     private String objective;
 
-    public void setVehicles(List<Integer> vehicles) {
-        this.vehicles = vehicles;
+    public void setTransports(List<Integer> transports) {
+        this.transports = transports;
     }
 
     public void setCommodities(Map<Integer, Integer> commodities) {
@@ -53,8 +53,8 @@ public class ProblemDescription {
         this.objective = objective;
     }
 
-    public List<Integer> getVehicles() {
-        return vehicles;
+    public List<Integer> getTransports() {
+        return transports;
     }
 
     public Map<Integer, Integer> getCommodities() {
@@ -92,7 +92,7 @@ public class ProblemDescription {
         }
 
         // Initialize transports and commodities
-        Map<Integer, Transport> transportMap = vehicles.stream().collect(
+        Map<Integer, Transport> transportMap = transports.stream().collect(
             Collectors.toMap(identity(), v -> new Transport(v, flippedCapacities.get(v))));
         Map<Integer, CommodityAction> commodityActions = new HashMap<>();
         for (Map.Entry<Integer, Integer> commodityEntry : commodities.entrySet()) {
@@ -133,7 +133,7 @@ public class ProblemDescription {
     @Override
     public String toString() {
         return new StringBuilder()
-            .append("Vehicles: ").append(vehicles).append("\n")
+            .append("Transports: ").append(transports).append("\n")
             .append("Commodities: " ).append(commodities).append("\n")
             .append("Distances: ").append(Arrays.deepToString(distances)).append("\n")
             .append("Durations: ").append(Arrays.deepToString(durations)).append("\n")

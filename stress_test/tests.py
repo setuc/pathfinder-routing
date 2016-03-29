@@ -14,7 +14,7 @@ def data(t, c):
   transports = range(1, t + 1)
   commodities = { x: x + c for x in range(t + 1, t + c + 1) }
   return {
-    'vehicles': transports,
+    'transports': transports,
     'commodities': commodities,
     'durations': distance_matrix,
     'distances': distance_matrix,
