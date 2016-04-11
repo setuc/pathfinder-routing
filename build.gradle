@@ -16,7 +16,6 @@ dependencies {
     compile 'com.sun.jersey:jersey-server:1.19.1'
     compile 'com.sun.jersey:jersey-servlet:1.19.1'
     compile 'javax.ws.rs:jsr311-api:1.1.1'
-    compile 'org.optaplanner:optaplanner-core:6.3.0.Final'
     compile 'xyz.thepathfinder:simulatedannealing:0.0.3'
     compile 'org.slf4j:slf4j-api:1.7.19'
     compile 'org.slf4j:slf4j-simple:1.7.19'
