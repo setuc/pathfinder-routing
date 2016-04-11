@@ -1,20 +1,28 @@
 package xyz.thepathfinder.routing.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import xyz.thepathfinder.routing.domain.RoutingSolution;
+import xyz.thepathfinder.routing.domain.CommodityAction;
 import xyz.thepathfinder.routing.domain.Transport;
-
-import static java.util.stream.Collectors.toList;
 
 public class ProblemSolution {
     private List<List<Integer>> routes;
 
     public ProblemSolution() { }
 
-    public static ProblemSolution create(RoutingSolution solution) {
-        return new ProblemSolution(solution.getTransportList().stream()
-                .map(Transport::getPathfinderRoute).collect(toList()));
+    public static ProblemSolution create(Map<Transport, List<CommodityAction>> routes) {
+        List<List<Integer>> integerRoutes = new ArrayList<>();
+        for (Map.Entry<Transport, List<CommodityAction>> routeEntry : routes.entrySet()) {
+            List<Integer> singleRoute = new ArrayList<>();
+            singleRoute.add(Integer.parseInt(routeEntry.getKey().getName()));
+            for (CommodityAction action : routeEntry.getValue()) {
+                singleRoute.add(Integer.parseInt(action.getName()));
+            }
+            integerRoutes.add(singleRoute);
+        }
+        return new ProblemSolution(integerRoutes);
     }
 
     public ProblemSolution(List<List<Integer>> routes) {

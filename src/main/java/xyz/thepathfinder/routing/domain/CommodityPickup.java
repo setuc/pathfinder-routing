@@ -1,25 +1,19 @@
 package xyz.thepathfinder.routing.domain;
 
-import org.optaplanner.core.api.domain.entity.PlanningEntity;
+public class CommodityPickup implements CommodityStart, CommodityAction {
+    final String name;
 
-import java.util.Map;
-
-@PlanningEntity
-public class CommodityPickup extends CommodityAction {
-    CommodityDropoff dropoff;
-
-    public CommodityPickup() { }
-
-    public CommodityPickup(int id, Map<String, Integer> capacities) {
-        this.id = id;
-        this.capacities = capacities;
+    public CommodityPickup(String name) {
+        this.name = name;
     }
 
-    public CommodityDropoff getDropoff() {
-        return dropoff;
+    @Override
+    public String getName() {
+        return name;
     }
 
-    public void setDropoff(CommodityDropoff dropoff) {
-        this.dropoff = dropoff;
+    @Override
+    public String toString() {
+        return getName();
     }
 }

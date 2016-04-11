@@ -1,22 +1,21 @@
 package xyz.thepathfinder.routing.domain;
 
-import java.util.Map;
+public class CommodityDropoff implements CommodityAction {
+    final CommodityStart start;
+    final String name;
 
-public class CommodityDropoff extends CommodityAction {
-    RouteAction pickup;
-
-    public CommodityDropoff() { }
-
-    public CommodityDropoff(int id, Map<String, Integer> capacities) {
-        this.id = id;
-        this.capacities = capacities;
+    public CommodityDropoff(String name, CommodityStart start) {
+        this.start = start;
+        this.name = name;
     }
 
-    public RouteAction getPickup() {
-        return this.pickup;
+    @Override
+    public String getName() {
+        return name;
     }
 
-    public void setPickup(RouteAction pickup) {
-        this.pickup = pickup;
+    @Override
+    public String toString() {
+        return getName();
     }
 }

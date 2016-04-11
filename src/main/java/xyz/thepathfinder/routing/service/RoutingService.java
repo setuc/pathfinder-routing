@@ -1,7 +1,5 @@
 package xyz.thepathfinder.routing.service;
 
-import org.optaplanner.core.api.solver.Solver;
-import org.optaplanner.core.api.solver.SolverFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,23 +9,30 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import xyz.thepathfinder.routing.domain.RoutingSolution;
+import xyz.thepathfinder.routing.domain.VRPSearchState;
+import xyz.thepathfinder.simulatedannealing.InfeasibleProblemException;
+import xyz.thepathfinder.simulatedannealing.LinearDecayScheduler;
+import xyz.thepathfinder.simulatedannealing.Problem;
+import xyz.thepathfinder.simulatedannealing.Scheduler;
+import xyz.thepathfinder.simulatedannealing.Solver;
 
 @Path("/")
 public class RoutingService {
-    Logger logger = LoggerFactory.getLogger(RoutingService.class);
+    private static final double INITIAL_TEMPERATURE = 10000;
+    private static final int NUMBER_OF_STEPS = 500000;
 
-    public static final String SOLVER_CONFIG = "xyz/thepathfinder/routing/solverconfig.xml";
+    Logger logger = LoggerFactory.getLogger(RoutingService.class);
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public ProblemSolution solveProblem(ProblemDescription problemDescription) {
+    public ProblemSolution solveProblem(ProblemDescription problemDescription)
+        throws InfeasibleProblemException {
         logger.info("Received request to route: " + problemDescription);
-        SolverFactory solverFactory = SolverFactory.createFromXmlResource(SOLVER_CONFIG);
-        Solver solver = solverFactory.buildSolver();
-        RoutingSolution routingSolution = problemDescription.createEmptyRoutingSolution();
-        solver.solve(routingSolution);
-        return ProblemSolution.create((RoutingSolution) solver.getBestSolution());
+        Scheduler scheduler = new LinearDecayScheduler(INITIAL_TEMPERATURE, NUMBER_OF_STEPS);
+        Problem<VRPSearchState> problem = problemDescription.createProblem();
+        Solver<VRPSearchState> solver = new Solver(problem, scheduler);
+        VRPSearchState solution = solver.solve();
+        return ProblemSolution.create(solution.getRoutes());
     }
 }
