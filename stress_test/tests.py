@@ -4,9 +4,17 @@ import json
 import requests
 import time
 import random
+import sys
+import math
+
+def distance(a, b):
+  x1, y1 = a
+  x2, y2 = b
+  return math.sqrt(math.pow(x1-x2,2) + math.pow(y1-y2,2))
 
 M = 30
-distance_matrix = [[0 if r==c else random.choice(range(1, 100)) for c in range(0,30)] for r in range (0, 30)]
+coordinates = [(random.random(), random.random()) for i in range(M)]
+distance_matrix = [[distance(coordinates[a],coordinates[b]) for a in range(M)] for b in range(M)]
 
 def data(t, c):
   if t + 2*c > len(distance_matrix):

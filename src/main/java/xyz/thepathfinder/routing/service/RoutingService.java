@@ -19,7 +19,7 @@ import xyz.thepathfinder.simulatedannealing.Solver;
 @Path("/")
 public class RoutingService {
     private static final double INITIAL_TEMPERATURE = 10000;
-    private static final int NUMBER_OF_STEPS = 500000;
+    private static final int NUMBER_OF_STEPS = 20000;
 
     Logger logger = LoggerFactory.getLogger(RoutingService.class);
 
@@ -28,7 +28,7 @@ public class RoutingService {
     @Produces(MediaType.APPLICATION_JSON)
     public ProblemSolution solveProblem(ProblemDescription problemDescription)
         throws InfeasibleProblemException {
-        logger.info("Received request to route: " + problemDescription);
+        logger.info("Received request to route");
         Scheduler scheduler = new LinearDecayScheduler(INITIAL_TEMPERATURE, NUMBER_OF_STEPS);
         Problem<VRPSearchState> problem = problemDescription.createProblem();
         Solver<VRPSearchState> solver = new Solver(problem, scheduler);
