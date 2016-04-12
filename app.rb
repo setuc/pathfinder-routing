@@ -35,7 +35,9 @@ class MasterRouter < Sinatra::Base
             :headers => { 'Content-Type' => 'application/json' },
             :timeout => settings.timeout
           }).parsed_response
-        rescue TimeoutError
+        rescue StandardError => e
+          puts 'Bad or missing response from worker'
+          puts e.message
           Thread.current[:output] = nil
         end
       }
