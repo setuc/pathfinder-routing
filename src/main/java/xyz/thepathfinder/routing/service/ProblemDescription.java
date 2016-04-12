@@ -120,7 +120,7 @@ public class ProblemDescription {
         Table<RouteAction, RouteAction, Integer> durationTable = HashBasedTable.create();
         for (int r = 0; r < distances.length; r++) {
             for (int c = 0; c < distances[r].length; c++) {
-                if (distances[r][c] > 0 && routeActionMap.containsKey(r+1) && routeActionMap.containsKey(c+1)) {
+                if (routeActionMap.containsKey(r+1) && routeActionMap.containsKey(c+1)) {
                     RouteAction ra1 = routeActionMap.get(r+1);
                     RouteAction ra2 = routeActionMap.get(c+1);
                     distanceTable.put(ra1, ra2, distances[r][c]);
