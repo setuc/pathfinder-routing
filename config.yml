@@ -1,4 +1,5 @@
 timeout: 10
 workers:
   - http://routing2.thepathfinder.xyz
-  - http://routing3.thepathfinder.xyz:8080/pathfinder-routing
+  - http://routing3.thepathfinder.xyz:8080/pathfinder-routing-linear-50000
+  - http://104.197.35.96

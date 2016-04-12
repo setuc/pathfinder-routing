@@ -47,7 +47,7 @@ class MasterRouter < Sinatra::Base
     best_distance = nil
     threads.each do |t|
       t.join
-      unless t[:output].nil?
+      unless t[:output].nil? or t[:output]["routes"].nil?
         route = t[:output]
         distance = compute_distance(route["routes"], distances)
         if best_distance.nil? or distance < best_distance
@@ -56,6 +56,7 @@ class MasterRouter < Sinatra::Base
         end
       end
     end
+    best_route = if best_route.nil? then {routes: []} else best_route end
     best_route.to_json
   end
 end
