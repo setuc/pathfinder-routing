@@ -1,0 +1,4 @@
+timeout: 10
+workers:
+  - http://routing2.thepathfinder.xyz
+  - http://routing3.thepathfinder.xyz:8080/pathfinder-routing
