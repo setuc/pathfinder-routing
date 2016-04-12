@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
 public class VRPSearchState implements SearchState<VRPSearchState> {
-    final static int MAX_STEP_TRIES = 1000;
+    final static int MAX_STEP_TRIES = 10;
     final VehicleRoutingProblem problem;
     final Map<Transport, List<CommodityAction>> routes;
     final Map<Transport, List<Map<String, Integer>>> capacitiesByTransportByIndex;

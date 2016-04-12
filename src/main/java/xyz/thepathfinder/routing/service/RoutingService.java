@@ -19,7 +19,7 @@ import xyz.thepathfinder.simulatedannealing.Solver;
 @Path("/")
 public class RoutingService {
     private static final double INITIAL_TEMPERATURE = 10000;
-    private static final int NUMBER_OF_STEPS = 20000;
+    private static final int NUMBER_OF_STEPS = 1000000;
 
     Logger logger = LoggerFactory.getLogger(RoutingService.class);
 

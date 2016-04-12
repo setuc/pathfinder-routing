@@ -10,9 +10,11 @@ import math
 def distance(a, b):
   x1, y1 = a
   x2, y2 = b
-  return math.sqrt(math.pow(x1-x2,2) + math.pow(y1-y2,2))
+  return int(24494*math.sqrt(math.pow(x1-x2,2) + math.pow(y1-y2,2)))
 
 M = 30
+MAX_T = 10
+MAX_C = 8
 coordinates = [(random.random(), random.random()) for i in range(M)]
 distance_matrix = [[distance(coordinates[a],coordinates[b]) for a in range(M)] for b in range(M)]
 
@@ -27,7 +29,7 @@ def data(t, c):
     'durations': distance_matrix,
     'distances': distance_matrix,
     'capacities': {
-      'capacity': dict({t: 1 for t in transports}, **dict({commodities[d]: 1 for d in commodities}, **{d: -1 for d in commodities}))
+      'capacity': dict({t: 3 for t in transports}, **dict({commodities[d]: 1 for d in commodities}, **{d: -1 for d in commodities}))
     },
     'parameters': {
     },
@@ -40,15 +42,12 @@ def time_request(url, data):
   start = time.time()
   r = requests.post(url, json=data)
   print "{0:.2f}".format(time.time() - start),
-  print "(" + str(route_length(json.loads(r.text)['routes'])) +")|",
-  #print r.status_code
-  #print 'Length: ' + str(route_length(json.loads(r.text)['routes']))
-  #return time.time() - start
+  print "(" + str(route_length(json.loads(r.text)['routes'])) +") |",
+  sys.stdout.flush()
 
-def test(t, c):
-  #print "Time for {} transports and {} commodities".format(t, c)
-  time_request('http://routing2.thepathfinder.xyz', data(t, c))
-  #print 'Time: ' + str(time_request('http://routing2.thepathfinder.xyz', data(t, c)))
+def test(url, t, c):
+  time_request(url, data(t, c))
+  #time_request('http://routing3.thepathfinder.xyz:8080/pathfinder-routing', data(t, c))
 
 def testlocal(t, c):
   time_request('http://localhost:8080/routing', data(t, c))
@@ -57,61 +56,28 @@ def testold(t, c):
   time_request('http://routing.thepathfinder.xyz', data(t, c))
 
 def route_length(routes):
-  #print 'Routes: ' + str(routes)
   return sum(distance_matrix[a-1][b-1] for [a, b] in sum([zip(r[:len(r)-1],r[1:]) for r in routes], []))
 
-if __name__ == '__main__':
-  print '|T=1|',
-  [test(1,c) for c in range(1, 5)]
+def pretty_test(name, url):
+  print name
   print
-  print '|T=2|',
-  [test(2,c) for c in range(1, 4)]
+  print '||',
+  for i in range(1,MAX_C):
+    print 'C='+str(i)+' |',
   print
-  print '|T=3|',
-  [test(3,c) for c in range(1, 4)]
-  print
-  print '|T=4|',
-  [test(4,c) for c in range(1, 4)]
-  print
-  print '|T=5|',
-  [test(5,c) for c in range(1, 4)]
-  print
-  print '|T=6|',
-  [test(6,c) for c in range(1, 3)]
-  print
-  print '|T=7|',
-  [test(7,c) for c in range(1, 3)]
-  print
-  print '|T=8|',
-  [test(8,c) for c in range(1, 3)]
-  print
-  print '|T=9|',
-  [test(9,c) for c in range(1, 3)]
-  print 'OLD'
-  print '|T=1|',
-  [testold(1,c) for c in range(1, 5)]
-  print
-  print '|T=2|',
-  [testold(2,c) for c in range(1, 4)]
-  print
-  print '|T=3|',
-  [testold(3,c) for c in range(1, 4)]
-  print
-  print '|T=4|',
-  [testold(4,c) for c in range(1, 4)]
-  print
-  print '|T=5|',
-  [testold(5,c) for c in range(1, 4)]
-  print
-  print '|T=6|',
-  [testold(6,c) for c in range(1, 3)]
-  print
-  print '|T=7|',
-  [testold(7,c) for c in range(1, 3)]
-  print
-  print '|T=8|',
-  [testold(8,c) for c in range(1, 3)]
-  print
-  print '|T=9|',
-  [testold(9,c) for c in range(1, 3)]
+  for i in range(0,MAX_C):
+    print '|---',
+  print '|'
+  for i in range(1,MAX_T):
+    print '|T='+str(i)+'|',
+    [test(url,i,c) for c in range(1,MAX_C)]
+    print
 
+if __name__ == '__main__':
+  pretty_test('SA - Linear (T=100, N=1000000)', 'http://routing3.thepathfinder.xyz:8080/pathfinder-routing-linear-100')
+  pretty_test('SA - Linear (T=1000, N=1000000)', 'http://routing3.thepathfinder.xyz:8080/pathfinder-routing-linear-1000')
+  pretty_test('SA - Linear (T=10000, N=1000000)', 'http://routing3.thepathfinder.xyz:8080/pathfinder-routing-linear-10000')
+  pretty_test('SA - Exponential (T=100, N=1000000)', 'http://routing3.thepathfinder.xyz:8080/pathfinder-routing-exp-100')
+  pretty_test('SA - Exponential (T=1000, N=1000000)', 'http://routing3.thepathfinder.xyz:8080/pathfinder-routing-exp-1000')
+  pretty_test('SA - Exponential (T=10000, N=1000000)', 'http://routing3.thepathfinder.xyz:8080/pathfinder-routing-exp-10000')
+  pretty_test('Optaplanner', 'http://routing2.thepathfinder.xyz')
