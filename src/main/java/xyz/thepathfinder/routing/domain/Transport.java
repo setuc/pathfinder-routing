@@ -18,7 +18,7 @@ public class Transport implements RouteAction {
 
     public Transport(int id, Map<String, Integer> capacities) {
         this.id = id;
-        this.capacities = capacities;
+        this.capacities = capacities == null ? new HashMap<>() : capacities;
     }
 
     @Override

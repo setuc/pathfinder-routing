@@ -2,6 +2,7 @@ package xyz.thepathfinder.routing.domain;
 
 import org.optaplanner.core.api.domain.entity.PlanningEntity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @PlanningEntity
@@ -12,7 +13,7 @@ public class CommodityPickup extends CommodityAction {
 
     public CommodityPickup(int id, Map<String, Integer> capacities) {
         this.id = id;
-        this.capacities = capacities;
+        this.capacities = capacities == null ? new HashMap<>() : capacities;
     }
 
     public CommodityDropoff getDropoff() {

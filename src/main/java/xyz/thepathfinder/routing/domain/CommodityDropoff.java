@@ -1,5 +1,6 @@
 package xyz.thepathfinder.routing.domain;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class CommodityDropoff extends CommodityAction {
@@ -9,7 +10,7 @@ public class CommodityDropoff extends CommodityAction {
 
     public CommodityDropoff(int id, Map<String, Integer> capacities) {
         this.id = id;
-        this.capacities = capacities;
+        this.capacities = capacities == null ? new HashMap<>() : capacities;
     }
 
     public RouteAction getPickup() {
