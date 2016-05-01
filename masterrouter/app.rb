@@ -14,7 +14,9 @@ class MasterRouter < Sinatra::Base
     total = 0
     routes.each do |route|
       route.each_cons(2) do |a, b|
-        total = total + distances[a-1][b-1]
+        if distances.include? (a-1) and distances[a-1].include? (b-1)
+          total = total + distances[a-1][b-1]
+        end
       end
     end
     total
