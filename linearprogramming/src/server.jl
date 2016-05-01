@@ -8,7 +8,7 @@ Logging.configure(level=DEBUG)
 include("solve.jl")
 
 function parsetransports(raw)
-  return raw["vehicles"]
+  return raw["transports"]
 end
 
 function parsecommodities(raw)
