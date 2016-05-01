@@ -21,4 +21,8 @@ On every computation, Pathfinder uses three optimization approaches and selects 
 Each approach works well for some scenarios and poorly for others. The three approaches Pathfinder employs are:
 * Linear programming using Julia, JuMP and CLP. Code is in `/linearprogramming`
 * Heuristic search using Optaplanner. Code is in `/heuristicsearch`.
-* Simmulated annealing using a built-from-scratch implementation. Code is in `/simulatedannealing` and at `https://github.com/csse497/simulatedannealing`.
+* Simmulated annealing using a built-from-scratch implementation. Code is in `/simulatedannealing` and at [https://github.com/csse497/simulatedannealing](https://github.com/csse497/simulatedannealing).
+
+## LICENSE
+
+[MIT](https://raw.githubusercontent.com/CSSE497/pathfinder-routing/master/LICENSE).
