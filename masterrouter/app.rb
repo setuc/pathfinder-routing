@@ -14,7 +14,9 @@ class MasterRouter < Sinatra::Base
     total = 0
     routes.each do |route|
       route.each_cons(2) do |a, b|
-        if distances.include? (a-1) and distances[a-1].include? (b-1)
+        if distances[a-1].nil? or distances[a-1][b-1].nil?
+          puts "Distances does not include #{a}, #{b}"
+        else
           total = total + distances[a-1][b-1]
         end
       end
@@ -23,12 +25,13 @@ class MasterRouter < Sinatra::Base
   end
 
   post '/' do
-    puts 'Route request received'
     request.body.rewind
     request_payload = JSON.parse request.body.read
     distances = request_payload['distances']
+    puts "Route request received with distances #{distances}"
 
     threads = []
+    puts "Sending work to: #{settings.workers}"
     settings.workers.each do |u|
       threads << Thread.new {
         begin
@@ -52,12 +55,14 @@ class MasterRouter < Sinatra::Base
       unless t[:output].nil? or t[:output]["routes"].nil?
         route = t[:output]
         distance = compute_distance(route["routes"], distances)
+        puts "Got route response: #{route} with distance #{distance}"
         if best_distance.nil? or distance < best_distance
           best_distance = distance
           best_route = route
         end
       end
     end
+    puts "Distance: #{best_distance.to_s}"
     best_route = if best_route.nil? then {routes: []} else best_route end
     best_route.to_json
   end

@@ -4,3 +4,15 @@ workers:
   - http://routing3.thepathfinder.xyz:8080/pathfinder-routing-linear-50000
   - http://104.197.35.96
   - http://104.197.133.77
+  - http://104.154.34.234:8080/simulatedannealing
+  - http://146.148.92.187:8080/simulatedannealing
+  - http://104.154.68.244:8080/simulatedannealing
+  - http://104.154.64.183:8080/simulatedannealing
+  - http://104.197.3.178:8080/simulatedannealing
+  - http://107.178.223.93:8080/simulatedannealing
+  - http://104.154.63.101:8080/simulatedannealing
+  - http://104.197.154.96:8080/simulatedannealing
+  - http://146.148.74.206:8080/simulatedannealing
+  - http://104.197.44.142:8080/simulatedannealing
+  - http://104.154.87.155:8080/simulatedannealing
+  - http://107.178.218.182:8080/simulatedannealing
